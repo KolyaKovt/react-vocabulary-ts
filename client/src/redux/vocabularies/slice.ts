@@ -5,8 +5,16 @@ import {
   fetchVocabulary,
   renameVocabularyThunk,
 } from "./operations"
+import { Vocabulary } from "../../types/Vocabulary"
 
-const initialState = {
+interface State {
+  vocabularies: Vocabulary[]
+  vocabulary: Vocabulary | null
+  isLoading: boolean
+  error: string | null
+}
+
+const initialState: State = {
   vocabularies: [],
   vocabulary: null,
   isLoading: false,
@@ -16,6 +24,7 @@ const initialState = {
 const slice = createSlice({
   name: "vocabularies",
   initialState,
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(fetchVocabulariesThunk.fulfilled, (state, { payload }) => {
@@ -60,7 +69,7 @@ const slice = createSlice({
           fetchVocabulary.rejected
         ),
         (state, { payload }) => {
-          state.error = payload
+          state.error = payload as string
         }
       )
   },

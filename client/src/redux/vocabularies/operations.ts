@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import axios from "axios"
+import axios, { AxiosError, isAxiosError } from "axios"
+import { Vocabulary } from "../../types/Vocabulary"
 
 // http://localhost:3310
 // https://vocabulary-dsm6.onrender.com
@@ -10,60 +11,95 @@ const api = axios.create({
       : "http://localhost:3310",
 })
 
-export const fetchVocabulariesThunk = createAsyncThunk(
+export const fetchVocabulariesThunk = createAsyncThunk<Vocabulary[]>(
   "fetch vocabularies",
   async (_, thunkAPI) => {
     try {
       const res = await api.get("/")
       return res.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message)
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError
+        return thunkAPI.rejectWithValue(axiosError.message)
+      } else {
+        return thunkAPI.rejectWithValue(
+          "An error occured while fetching vocabularies"
+        )
+      }
     }
   }
 )
 
-export const fetchVocabulary = createAsyncThunk(
+export const fetchVocabulary = createAsyncThunk<Vocabulary, number>(
   "fetch a vocabulary",
   async (id, thunkAPI) => {
     try {
       const res = await api.get(`/${id}`)
       return res.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message)
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError
+        return thunkAPI.rejectWithValue(axiosError.message)
+      } else {
+        return thunkAPI.rejectWithValue(
+          "An error occured while fetching a vocabulary"
+        )
+      }
     }
   }
 )
 
-export const createVocabularyThunk = createAsyncThunk(
+export const createVocabularyThunk = createAsyncThunk<void, string>(
   "create a vocabulary",
   async (name, thunkAPI) => {
     try {
       await api.post("/", { name })
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message)
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError
+        return thunkAPI.rejectWithValue(axiosError.message)
+      } else {
+        return thunkAPI.rejectWithValue(
+          "An error occured while creating a vocabulary"
+        )
+      }
     }
   }
 )
 
-export const deleteVocabularyThunk = createAsyncThunk(
+export const deleteVocabularyThunk = createAsyncThunk<number, number>(
   "delete a vocabulary",
   async (id, thunkAPI) => {
     try {
       await api.delete(`/${id}`)
       return id
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message)
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError
+        return thunkAPI.rejectWithValue(axiosError.message)
+      } else {
+        return thunkAPI.rejectWithValue(
+          "An error occured while deleting a vocabulary"
+        )
+      }
     }
   }
 )
 
-export const renameVocabularyThunk = createAsyncThunk(
-  "rename a vocabulary",
-  async (info, thunkAPI) => {
-    try {
-      await api.patch("/", info)
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message)
+export const renameVocabularyThunk = createAsyncThunk<
+  void,
+  { id: number; name: string }
+>("rename a vocabulary", async (info, thunkAPI) => {
+  try {
+    await api.patch("/", info)
+  } catch (error) {
+    if (isAxiosError(error)) {
+      const axiosError = error as AxiosError
+      return thunkAPI.rejectWithValue(axiosError.message)
+    } else {
+      return thunkAPI.rejectWithValue(
+        "An error occured while renaming a vocabulary"
+      )
     }
   }
-)
+})
