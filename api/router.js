@@ -56,7 +56,7 @@ async function getVocabularyObj(vocabulary) {
 }
 
 // Get all vocabularies
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   const query = `SELECT * FROM vocabularies;`
   const vocabularies = await queryAsync(query)
 
@@ -88,28 +88,31 @@ router.post("/", async (req, res) => {
 
 // Rename a vocabulary
 router.patch("/", async (req, res) => {
+  const { name, id } = req.body
   const query = "UPDATE vocabularies SET name = ? WHERE id = ?;"
-  await queryAsync(query, [req.body.name, req.body.id])
+  await queryAsync(query, [name, id])
 
   return res.sendStatus(200)
 })
 
 // Delete a vocabulary
 router.delete("/:id", async (req, res) => {
+  const { id } = req.body
   const queryWords = "DELETE FROM words WHERE vocabulary_id = ?;"
   const queryVocs = "DELETE FROM vocabularies WHERE id = ?;"
 
-  await queryAsync(queryWords, [req.params.id])
-  await queryAsync(queryVocs, [req.params.id])
+  await queryAsync(queryWords, [id])
+  await queryAsync(queryVocs, [id])
 
   res.sendStatus(204)
 })
 
 // Add a word to a vocabulary
 router.post("/words", async (req, res) => {
+  const { word, translation, id } = req.body
   const query =
     "INSERT INTO words (word, translation, vocabulary_id) VALUES (?, ?, ?);"
-  await queryAsync(query, [req.body.word, req.body.transl, req.body.id])
+  await queryAsync(query, [word, translation, id])
 
   return res.sendStatus(201)
 })
@@ -124,8 +127,9 @@ router.delete("/words/:id", async (req, res) => {
 
 // Change a word in a vocabulary
 router.patch("/words", async (req, res) => {
+  const { word, translation, id } = req.body
   const query = "UPDATE words SET word = ?, translation = ? WHERE id = ?;"
-  await queryAsync(query, [req.body.word, req.body.transl, req.body.id])
+  await queryAsync(query, [word, translation, id])
 
   return res.sendStatus(200)
 })
