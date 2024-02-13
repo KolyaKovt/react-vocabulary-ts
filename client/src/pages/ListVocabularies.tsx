@@ -1,9 +1,9 @@
 import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 import { Loader } from "../components/Loader"
 
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import {
   deleteVocabularyThunk,
   fetchVocabulariesThunk,
@@ -14,9 +14,9 @@ import {
 } from "../redux/vocabularies/slice"
 
 export default function ListVocabularies() {
-  const dispatch = useDispatch()
-  const vocabularies = useSelector(selectVocabularies)
-  const isLoading = useSelector(selectIsLoading)
+  const dispatch = useAppDispatch()
+  const vocabularies = useAppSelector(selectVocabularies)
+  const isLoading = useAppSelector(selectIsLoading)
 
   useEffect(() => {
     dispatch(fetchVocabulariesThunk())
@@ -25,7 +25,7 @@ export default function ListVocabularies() {
   return (
     <main className="flex flex-col items-center">
       {isLoading && <Loader />}
-      
+
       <section>
         <div className="py-6 sticky top-0 bg-[#1d232a]">
           <h1 className="mb-6 text-4xl font-bold">Vocabularies</h1>
@@ -55,7 +55,7 @@ export default function ListVocabularies() {
                   <button
                     className="btn btn-danger"
                     onClick={() =>
-                      dispatch(deleteVocabularyThunk(vocabulary.id))
+                      dispatch(deleteVocabularyThunk(vocabulary.id.toString()))
                     }
                   >
                     Delete

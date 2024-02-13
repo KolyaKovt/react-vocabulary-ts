@@ -1,8 +1,24 @@
-import { useEffect, useRef } from "react"
+import { FormEventHandler, useEffect } from "react"
+import { FieldValues, UseFormRegister } from "react-hook-form"
 import { Link, useParams } from "react-router-dom"
+import { useAppDispatch } from "../redux/hooks"
+import { fetchVocabulary } from "../redux/vocabularies/operations"
 
-export default function WordForm({ submit, register, btnLabel }) {
+interface Props {
+  submit: FormEventHandler<HTMLFormElement>
+  register: UseFormRegister<FieldValues>
+  btnLabel: string
+}
+
+export const WordForm = ({ submit, register, btnLabel }: Props) => {
+  const dispatch = useAppDispatch()
   const { id } = useParams()
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchVocabulary())
+    }
+  }, [])
 
   return (
     // <form onSubmit={submit}>

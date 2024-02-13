@@ -1,6 +1,14 @@
+import { FormEventHandler } from "react"
+import { FieldValues, UseFormRegister } from "react-hook-form"
 import { Link } from "react-router-dom"
 
-export default function VocabularyForm({ submit, register, btnLabel }) {
+interface Props {
+  submit: FormEventHandler<HTMLFormElement>
+  register: UseFormRegister<FieldValues>
+  btnLabel: string
+}
+
+export const VocabularyForm = ({ submit, register, btnLabel }: Props) => {
   return (
     <form onSubmit={submit} className="card-body mb-4">
       <div className="form-control">

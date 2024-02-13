@@ -5,9 +5,9 @@ import NewVocabulary from "../pages/NewVocabulary"
 import OpenVocabulary from "../pages/OpenVocabulary"
 import RenameVocabulary from "../pages/RenameVocabulary"
 import AddWords from "../pages/AddWords"
-import ChangeWords from "../pages/ChangeWords"
-import ConnectingWords from "../pages/ConnectingWords"
-import GuessingWords from "../pages/GuessingWords"
+// import ChangeWords from "../pages/ChangeWords"
+// import ConnectingWords from "../pages/ConnectingWords"
+// import GuessingWords from "../pages/GuessingWords"
 
 function App() {
   return (

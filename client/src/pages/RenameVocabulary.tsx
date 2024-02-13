@@ -1,23 +1,25 @@
-import { useDispatch } from "react-redux"
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 
-import VocabularyForm from "../components/VocabularyForm"
+import { VocabularyForm } from "../components/VocabularyForm"
 import { renameVocabularyThunk } from "../redux/vocabularies/operations"
 import { useNavigate, useParams } from "react-router-dom"
+import { useAppDispatch } from "../redux/hooks"
 
 export default function RenameVocabulary() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { register, handleSubmit, reset } = useForm()
   const { id } = useParams()
 
-  const submit = data => {
-    dispatch(
-      renameVocabularyThunk({
-        name: data.name.trim(),
-        id,
-      })
-    )
+  const submit: SubmitHandler<FieldValues> = data => {
+    if (id) {
+      dispatch(
+        renameVocabularyThunk({
+          name: data.name.trim(),
+          id: id,
+        })
+      )
+    }
     navigate("/")
     reset()
   }

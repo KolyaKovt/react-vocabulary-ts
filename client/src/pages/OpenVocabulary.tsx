@@ -1,19 +1,19 @@
 import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 import { selectIsLoading, selectVocabulary } from "../redux/vocabularies/slice"
 import { fetchVocabulary } from "../redux/vocabularies/operations"
 import { Loader } from "../components/Loader"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
 
 export default function OpenVocabulary() {
-  const dispatch = useDispatch()
-  const vocabulary = useSelector(selectVocabulary)
-  const isLoading = useSelector(selectIsLoading)
+  const dispatch = useAppDispatch()
+  const vocabulary = useAppSelector(selectVocabulary)
+  const isLoading = useAppSelector(selectIsLoading)
 
   const { id } = useParams()
 
   useEffect(() => {
-    dispatch(fetchVocabulary(id))
+    if (id) dispatch(fetchVocabulary(id))
   }, [dispatch, id])
 
   if (isLoading || !vocabulary) return <Loader />
