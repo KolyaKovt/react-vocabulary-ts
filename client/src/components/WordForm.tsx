@@ -16,38 +16,11 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchVocabulary())
+      dispatch(fetchVocabulary(id))
     }
-  }, [])
+  }, [dispatch, id])
 
   return (
-    // <form onSubmit={submit}>
-    //   <div className="inputs">
-    //     <div className="input">
-    //       <input
-    //         required
-    //         id="word"
-    //         type="text"
-    //         className="form-control"
-    //         placeholder="First language"
-    //       />
-    //     </div>
-    //     <div className="input">
-    //       <input
-    //         required
-    //         id="transl"
-    //         type="text"
-    //         className="form-control"
-    //         placeholder="Second language"
-    //       />
-    //     </div>
-    //   </div>
-    //   <Link className="btn btn-secondary" to={`/${id}`}>
-    //     Cancel
-    //   </Link>
-    //   <button className="btn btn-primary">Save</button>
-    // </form>
-
     <form onSubmit={submit} className="card-body mb-4">
       <div className="form-control">
         <label className="label">
@@ -56,7 +29,7 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
         <input
           {...register("word")}
           type="text"
-          placeholder="Word"
+          placeholder="I like you"
           className="input input-bordered"
           required
         />
@@ -68,7 +41,7 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
         <input
           {...register("transl")}
           type="text"
-          placeholder="Word"
+          placeholder="Ik vind je leuk"
           className="input input-bordered"
           required
         />

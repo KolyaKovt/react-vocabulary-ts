@@ -26,7 +26,7 @@ export default function AddWords() {
 
   return (
     <main className="flex flex-col items-center">
-      <h1>Adding words in: {vocabulary.name}</h1>
+      <h1 className="mt-6 mb-6 text-4xl font-bold">Adding words in: {vocabulary.name}</h1>
       <WordForm
         submit={handleSubmit(submit)}
         register={register}
