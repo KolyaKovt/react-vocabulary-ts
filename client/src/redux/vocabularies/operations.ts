@@ -11,6 +11,15 @@ const api = axios.create({
       : "http://localhost:3310",
 })
 
+const getTextForError = (error: unknown, process: string) => {
+  if (isAxiosError(error)) {
+    const axiosError = error as AxiosError
+    return axiosError.message
+  }
+
+  return `An error occured while ${process}`
+}
+
 export const fetchVocabulariesThunk = createAsyncThunk<Vocabulary[]>(
   "fetch vocabularies",
   async (_, thunkAPI) => {
@@ -18,36 +27,26 @@ export const fetchVocabulariesThunk = createAsyncThunk<Vocabulary[]>(
       const res = await api.get("/")
       return res.data
     } catch (error) {
-      if (isAxiosError(error)) {
-        const axiosError = error as AxiosError
-        return thunkAPI.rejectWithValue(axiosError.message)
-      } else {
-        return thunkAPI.rejectWithValue(
-          "An error occured while fetching vocabularies"
-        )
-      }
+      return thunkAPI.rejectWithValue(
+        getTextForError(error, "fetching vocabularies")
+      )
     }
   }
 )
 
-export const fetchVocabulary = createAsyncThunk<Vocabulary, string | number>(
-  "fetch a vocabulary",
-  async (id, thunkAPI) => {
-    try {
-      const res = await api.get(`/${id}`)
-      return res.data
-    } catch (error) {
-      if (isAxiosError(error)) {
-        const axiosError = error as AxiosError
-        return thunkAPI.rejectWithValue(axiosError.message)
-      } else {
-        return thunkAPI.rejectWithValue(
-          "An error occured while fetching a vocabulary"
-        )
-      }
-    }
+export const fetchVocabularyThunk = createAsyncThunk<
+  Vocabulary,
+  string | number
+>("fetch a vocabulary", async (id, thunkAPI) => {
+  try {
+    const res = await api.get(`/${id}`)
+    return res.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(
+      getTextForError(error, "fetching a vocabulary")
+    )
   }
-)
+})
 
 export const createVocabularyThunk = createAsyncThunk<void, string>(
   "create a vocabulary",
@@ -55,14 +54,9 @@ export const createVocabularyThunk = createAsyncThunk<void, string>(
     try {
       await api.post("/", { name })
     } catch (error) {
-      if (isAxiosError(error)) {
-        const axiosError = error as AxiosError
-        return thunkAPI.rejectWithValue(axiosError.message)
-      } else {
-        return thunkAPI.rejectWithValue(
-          "An error occured while creating a vocabulary"
-        )
-      }
+      return thunkAPI.rejectWithValue(
+        getTextForError(error, "creating a vocabulary")
+      )
     }
   }
 )
@@ -74,14 +68,9 @@ export const deleteVocabularyThunk = createAsyncThunk<number, string | number>(
       await api.delete(`/${id}`)
       return +id
     } catch (error) {
-      if (isAxiosError(error)) {
-        const axiosError = error as AxiosError
-        return thunkAPI.rejectWithValue(axiosError.message)
-      } else {
-        return thunkAPI.rejectWithValue(
-          "An error occured while deleting a vocabulary"
-        )
-      }
+      return thunkAPI.rejectWithValue(
+        getTextForError(error, "deleting a vocabulary")
+      )
     }
   }
 )
@@ -93,29 +82,31 @@ export const renameVocabularyThunk = createAsyncThunk<
   try {
     await api.patch("/", data)
   } catch (error) {
-    if (isAxiosError(error)) {
-      const axiosError = error as AxiosError
-      return thunkAPI.rejectWithValue(axiosError.message)
-    } else {
-      return thunkAPI.rejectWithValue(
-        "An error occured while renaming a vocabulary"
-      )
-    }
+    return thunkAPI.rejectWithValue(
+      getTextForError(error, "renaming a vocabulary")
+    )
   }
 })
 
 export const addWordThunk = createAsyncThunk<
   void,
   { id: string | number; word: string; translation: string }
->("add words", async (data, thunkAPI) => {
+>("add a word", async (data, thunkAPI) => {
   try {
     await api.post("/words", data)
   } catch (error) {
-    if (isAxiosError(error)) {
-      const axiosError = error as AxiosError
-      return thunkAPI.rejectWithValue(axiosError.message)
-    } else {
-      return thunkAPI.rejectWithValue("An error occured while adding a word")
-    }
+    return thunkAPI.rejectWithValue(getTextForError(error, "adding a word"))
   }
 })
+
+export const deleteWordThunk = createAsyncThunk<number, number>(
+  "delete a word",
+  async (id, thunkAPI) => {
+    try {
+      await api.delete(`/words/${id}`)
+      return id
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getTextForError(error, "deleting a word"))
+    }
+  }
+)

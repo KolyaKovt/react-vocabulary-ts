@@ -1,8 +1,10 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit"
 import {
+  addWordThunk,
   deleteVocabularyThunk,
+  deleteWordThunk,
   fetchVocabulariesThunk,
-  fetchVocabulary,
+  fetchVocabularyThunk,
   renameVocabularyThunk,
 } from "./operations"
 import { Vocabulary } from "../../types/Vocabulary"
@@ -35,40 +37,56 @@ const slice = createSlice({
           voc => voc.id !== payload
         )
       })
-      .addCase(fetchVocabulary.fulfilled, (state, { payload }) => {
+      .addCase(fetchVocabularyThunk.fulfilled, (state, { payload }) => {
         state.vocabulary = payload
+      })
+      .addCase(deleteWordThunk.fulfilled, (state, { payload }) => {
+        const voc = state.vocabulary
+        if (voc) {
+          const wordIndex = voc.wordsIds.indexOf(payload)
+          voc.firstLang.splice(wordIndex, 1)
+          voc.secLang.splice(wordIndex, 1)
+          voc.wordsIds.splice(wordIndex, 1)
+        }
       })
       .addMatcher(
         isAnyOf(
           deleteVocabularyThunk.pending,
-          deleteVocabularyThunk.pending,
           renameVocabularyThunk.pending,
-          fetchVocabulary.pending
+          fetchVocabulariesThunk.pending,
+          fetchVocabularyThunk.pending,
+          addWordThunk.pending,
+          deleteWordThunk.pending
         ),
         state => {
           state.isLoading = true
-        }
-      )
-      .addMatcher(
-        isAnyOf(
-          deleteVocabularyThunk.fulfilled,
-          deleteVocabularyThunk.fulfilled,
-          renameVocabularyThunk.fulfilled,
-          fetchVocabulary.fulfilled
-        ),
-        state => {
-          state.isLoading = false
           state.error = null
         }
       )
       .addMatcher(
         isAnyOf(
-          deleteVocabularyThunk.rejected,
+          deleteVocabularyThunk.fulfilled,
+          renameVocabularyThunk.fulfilled,
+          fetchVocabulariesThunk.fulfilled,
+          fetchVocabularyThunk.fulfilled,
+          deleteWordThunk.fulfilled,
+          addWordThunk.fulfilled
+        ),
+        state => {
+          state.isLoading = false
+        }
+      )
+      .addMatcher(
+        isAnyOf(
           deleteVocabularyThunk.rejected,
           renameVocabularyThunk.rejected,
-          fetchVocabulary.rejected
+          fetchVocabulariesThunk.rejected,
+          fetchVocabularyThunk.rejected,
+          deleteWordThunk.rejected,
+          addWordThunk.rejected
         ),
         (state, { payload }) => {
+          state.isLoading = false
           state.error = payload as string
         }
       )

@@ -2,7 +2,7 @@ import { FormEventHandler, useEffect } from "react"
 import { FieldValues, UseFormRegister } from "react-hook-form"
 import { Link, useParams } from "react-router-dom"
 import { useAppDispatch } from "../redux/hooks"
-import { fetchVocabulary } from "../redux/vocabularies/operations"
+import { fetchVocabularyThunk } from "../redux/vocabularies/operations"
 
 interface Props {
   submit: FormEventHandler<HTMLFormElement>
@@ -16,7 +16,7 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchVocabulary(id))
+      dispatch(fetchVocabularyThunk(id))
     }
   }, [dispatch, id])
 
@@ -39,7 +39,7 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
           <span className="label-text">Translation</span>
         </label>
         <input
-          {...register("transl")}
+          {...register("translation")}
           type="text"
           placeholder="Ik vind je leuk"
           className="input input-bordered"
@@ -47,7 +47,7 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
         />
       </div>
       <div className="flex flex-row mt-6 gap-2">
-        <Link className="btn btn-secondary" to="/">
+        <Link className="btn btn-secondary" to={`/${id}`}>
           Cancel
         </Link>
         <button className="btn btn-primary">{btnLabel}</button>
