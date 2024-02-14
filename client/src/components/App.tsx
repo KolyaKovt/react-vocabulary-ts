@@ -5,7 +5,7 @@ import NewVocabulary from "../pages/NewVocabulary"
 import OpenVocabulary from "../pages/OpenVocabulary"
 import RenameVocabulary from "../pages/RenameVocabulary"
 import AddWords from "../pages/AddWords"
-// import ChangeWords from "../pages/ChangeWords"
+import ChangeWords from "../pages/ChangeWords"
 // import ConnectingWords from "../pages/ConnectingWords"
 // import GuessingWords from "../pages/GuessingWords"
 
@@ -19,18 +19,9 @@ function App() {
         <Route path=":id">
           <Route index element={<OpenVocabulary />} />
           <Route path="add" element={<AddWords />} />
+          <Route path="change/:wordId" element={<ChangeWords />} />
         </Route>
       </Route>
-      {/* <Route
-        path="/words/change"
-        element={
-          <ChangeWords
-            getVocabulary={getVocabulary}
-            escapeHandler={escapeHandler}
-            index={index}
-          />
-        }
-      /> */}
       {/* <Route
         path="/play/connecting-words"
         element={

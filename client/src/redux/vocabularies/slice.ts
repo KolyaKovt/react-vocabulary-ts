@@ -1,6 +1,7 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit"
 import {
   addWordThunk,
+  changeWordThunk,
   deleteVocabularyThunk,
   deleteWordThunk,
   fetchVocabulariesThunk,
@@ -56,6 +57,7 @@ const slice = createSlice({
           fetchVocabulariesThunk.pending,
           fetchVocabularyThunk.pending,
           addWordThunk.pending,
+          changeWordThunk.pending,
           deleteWordThunk.pending
         ),
         state => {
@@ -70,6 +72,7 @@ const slice = createSlice({
           fetchVocabulariesThunk.fulfilled,
           fetchVocabularyThunk.fulfilled,
           deleteWordThunk.fulfilled,
+          changeWordThunk.fulfilled,
           addWordThunk.fulfilled
         ),
         state => {
@@ -83,6 +86,7 @@ const slice = createSlice({
           fetchVocabulariesThunk.rejected,
           fetchVocabularyThunk.rejected,
           deleteWordThunk.rejected,
+          changeWordThunk.rejected,
           addWordThunk.rejected
         ),
         (state, { payload }) => {

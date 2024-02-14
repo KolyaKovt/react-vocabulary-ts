@@ -75,29 +75,40 @@ export const deleteVocabularyThunk = createAsyncThunk<number, string | number>(
   }
 )
 
-export const renameVocabularyThunk = createAsyncThunk<
-  void,
-  { id: string | number; name: string }
->("rename a vocabulary", async (data, thunkAPI) => {
-  try {
-    await api.patch("/", data)
-  } catch (error) {
-    return thunkAPI.rejectWithValue(
-      getTextForError(error, "renaming a vocabulary")
-    )
-  }
-})
+interface vocabularyBody {
+  id: string | number
+  name: string
+}
 
-export const addWordThunk = createAsyncThunk<
-  void,
-  { id: string | number; word: string; translation: string }
->("add a word", async (data, thunkAPI) => {
-  try {
-    await api.post("/words", data)
-  } catch (error) {
-    return thunkAPI.rejectWithValue(getTextForError(error, "adding a word"))
+export const renameVocabularyThunk = createAsyncThunk<void, vocabularyBody>(
+  "rename a vocabulary",
+  async (body, thunkAPI) => {
+    try {
+      await api.patch("/", body)
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        getTextForError(error, "renaming a vocabulary")
+      )
+    }
   }
-})
+)
+
+interface wordBody {
+  id: string | number
+  word: string
+  translation: string
+}
+
+export const addWordThunk = createAsyncThunk<void, wordBody>(
+  "add a word",
+  async (body, thunkAPI) => {
+    try {
+      await api.post("/words", body)
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getTextForError(error, "adding a word"))
+    }
+  }
+)
 
 export const deleteWordThunk = createAsyncThunk<number, number>(
   "delete a word",
@@ -107,6 +118,17 @@ export const deleteWordThunk = createAsyncThunk<number, number>(
       return id
     } catch (error) {
       return thunkAPI.rejectWithValue(getTextForError(error, "deleting a word"))
+    }
+  }
+)
+
+export const changeWordThunk = createAsyncThunk<void, wordBody>(
+  "change a word",
+  async (body, thunkAPI) => {
+    try {
+      await api.patch("/words", body)
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getTextForError(error, "changing a word"))
     }
   }
 )
