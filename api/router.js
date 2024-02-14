@@ -97,7 +97,7 @@ router.patch("/", async (req, res) => {
 
 // Delete a vocabulary
 router.delete("/:id", async (req, res) => {
-  const { id } = req.body
+  const { id } = req.params
   const queryWords = "DELETE FROM words WHERE vocabulary_id = ?;"
   const queryVocs = "DELETE FROM vocabularies WHERE id = ?;"
 
