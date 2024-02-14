@@ -4,6 +4,7 @@ import {
   changeWordThunk,
   deleteVocabularyThunk,
   deleteWordThunk,
+  exerciseThunk,
   fetchVocabulariesThunk,
   fetchVocabularyThunk,
   renameVocabularyThunk,
@@ -41,6 +42,16 @@ const slice = createSlice({
       .addCase(fetchVocabularyThunk.fulfilled, (state, { payload }) => {
         state.vocabulary = payload
       })
+      .addCase(changeWordThunk.fulfilled, (state, action) => {
+        const voc = state.vocabulary
+
+        const { id, word, translation } = action.payload
+        if (voc) {
+          const wordIndex = voc.wordsIds.indexOf(+id)          
+          voc.firstLang[wordIndex] = word
+          voc.secLang[wordIndex] = translation
+        }
+      })
       .addCase(deleteWordThunk.fulfilled, (state, { payload }) => {
         const voc = state.vocabulary
         if (voc) {
@@ -58,6 +69,7 @@ const slice = createSlice({
           fetchVocabularyThunk.pending,
           addWordThunk.pending,
           changeWordThunk.pending,
+          exerciseThunk.pending,
           deleteWordThunk.pending
         ),
         state => {
@@ -73,6 +85,7 @@ const slice = createSlice({
           fetchVocabularyThunk.fulfilled,
           deleteWordThunk.fulfilled,
           changeWordThunk.fulfilled,
+          exerciseThunk.fulfilled,
           addWordThunk.fulfilled
         ),
         state => {
@@ -87,6 +100,7 @@ const slice = createSlice({
           fetchVocabularyThunk.rejected,
           deleteWordThunk.rejected,
           changeWordThunk.rejected,
+          exerciseThunk.rejected,
           addWordThunk.rejected
         ),
         (state, { payload }) => {

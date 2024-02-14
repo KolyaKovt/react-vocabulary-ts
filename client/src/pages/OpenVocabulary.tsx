@@ -1,43 +1,33 @@
-import { useEffect } from "react"
-import { Link, useParams } from "react-router-dom"
-import { selectIsLoading, selectVocabulary } from "../redux/vocabularies/slice"
-import {
-  deleteWordThunk,
-  fetchVocabularyThunk,
-} from "../redux/vocabularies/operations"
-import { Loader } from "../components/Loader"
+import { Link } from "react-router-dom"
+import { selectVocabulary } from "../redux/vocabularies/slice"
+import { deleteWordThunk } from "../redux/vocabularies/operations"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
+import { Vocabulary } from "../types/Vocabulary"
 
 export default function OpenVocabulary() {
   const dispatch = useAppDispatch()
-  const vocabulary = useAppSelector(selectVocabulary)
-  const isLoading = useAppSelector(selectIsLoading)
-  const { id } = useParams()
-
-  useEffect(() => {
-    if (id) dispatch(fetchVocabularyThunk(id))
-  }, [dispatch, id])
-
-  if (isLoading || !vocabulary) return <Loader />
+  const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
 
   return (
     <main className="flex flex-col items-center">
-      <h1 className="my-6">
-        {vocabulary.name} (count: {vocabulary.firstLang.length})
-      </h1>
-      <div className="flex gap-2">
-        <Link className="btn btn-secondary" to="/">
-          Cancel
-        </Link>
-        <Link className="btn btn-success" to="add">
-          Add words
-        </Link>
-        <Link className="btn btn-primary" to="play/connecting-words">
-          Play connecting words
-        </Link>
-        <Link className="btn btn-dark" to="play/guessing-words">
-          Play guessing word
-        </Link>
+      <div className="py-6 sticky top-0 bg-[#1d232a]">
+        <h1 className="mb-6 text-4xl font-bold">
+          {vocabulary.name} (count: {vocabulary.firstLang.length})
+        </h1>
+        <div className="flex gap-2">
+          <Link className="btn btn-secondary" to="/">
+            Cancel
+          </Link>
+          <Link className="btn btn-success" to="add">
+            Add words
+          </Link>
+          <Link className="btn btn-primary" to="play/connecting-words">
+            Play connecting words
+          </Link>
+          <Link className="btn btn-dark" to="play/guessing-words">
+            Play guessing word
+          </Link>
+        </div>
       </div>
       {vocabulary.firstLang.map((word, index) => {
         const wordsId = vocabulary.wordsIds[index]

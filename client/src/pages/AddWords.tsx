@@ -2,28 +2,22 @@ import { useEffect } from "react"
 import { WordForm } from "../components/WordForm"
 import { selectVocabulary } from "../redux/vocabularies/slice"
 import { useParams } from "react-router-dom"
-import { addWordThunk, fetchVocabularyThunk } from "../redux/vocabularies/operations"
+import { addWordThunk } from "../redux/vocabularies/operations"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
-import { Loader } from "../components/Loader"
+import { Vocabulary } from "../types/Vocabulary"
 
 export default function AddWords() {
-  const vocabulary = useAppSelector(selectVocabulary)
+  const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
   const { id } = useParams()
   const dispatch = useAppDispatch()
   const { register, handleSubmit, reset } = useForm()
-
-  useEffect(() => {
-    if (id) dispatch(fetchVocabularyThunk(id))
-  }, [dispatch, id])
 
   const submit: SubmitHandler<FieldValues> = data => {
     const { word, translation } = data
     if (id) dispatch(addWordThunk({ id, word, translation }))
     reset()
   }
-
-  if (!vocabulary) return <Loader />
 
   return (
     <main className="flex flex-col items-center">

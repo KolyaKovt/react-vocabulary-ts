@@ -1,106 +1,70 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import PropTypes from "prop-types"
-import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import { useCallback, useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
+import { selectVocabulary } from "../redux/vocabularies/slice"
+import { Loader } from "../components/Loader"
 
-const countOfStrins = 7
-let indecies = []
-let countOfGuessedWords = 0
+import {
+  exerciseThunk,
+  fetchVocabularyThunk,
+} from "../redux/vocabularies/operations"
+import { Vocabulary } from "../types/Vocabulary"
 
-export default function ConnectingWords({
-  getVocabulary,
-  incrementCountOfRep,
-  escapeHandler,
-}) {
-  const [vocabulary, setVocabulary] = useState({
-    firstLang: [],
-    secLang: [],
-    name: "",
-  })
+export default function ConnectingWords() {
+  const dispatch = useAppDispatch()
 
-  const escapeRef = useRef(null)
+  const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
+  const { id } = useParams()
 
-  const [currIndFL, setCurrIndFL] = useState([])
-  const [currIndSL, setCurrIndSL] = useState([])
+  const [countOfStrins] = useState(7)
+  const [indecies, setIndecies] = useState<number[]>([])
+  const [countOfGuessedWords, setCountOfGuessedWords] = useState(0)
+
+  const [currIndFL, setCurrIndFL] = useState<number[]>([])
+  const [currIndSL, setCurrIndSL] = useState<number[]>([])
 
   const [selectedFL, setSelectedFL] = useState(-1)
   const [selectedSL, setSelectedSL] = useState(-1)
 
-  const [guessedIndFL, setGuessedIndFL] = useState([])
-  const [guessedIndSL, setGuessedIndSL] = useState([])
+  const [guessedIndFL, setGuessedIndFL] = useState<number[]>([])
+  const [guessedIndSL, setGuessedIndSL] = useState<number[]>([])
 
   const [wrongAnswer, setWrongAnswer] = useState(false)
-
-  useEffect(() => {
-    getVocabulary(setVocabulary)
-
-    const handler = e => escapeHandler(e, escapeRef)
-
-    document.addEventListener("keydown", handler)
-
-    return () => {
-      document.removeEventListener("keydown", handler)
-    }
-  }, [])
-
-  useEffect(() => {
-    restart()
-  }, [vocabulary])
-
-  useEffect(() => {
-    if (selectedFL === -1 || selectedSL === -1) return
-
-    if (currIndFL[selectedFL] === currIndSL[selectedSL]) {
-      setGuessedIndFL(current => [...current, selectedFL])
-      setGuessedIndSL(current => [...current, selectedSL])
-      countOfGuessedWords++
-      clearSelected()
-    } else {
-      setWrongAnswer(true)
-      setTimeout(() => {
-        setWrongAnswer(false)
-        clearSelected()
-      }, 500)
-    }
-
-    if (vocabulary.firstLang.length - countOfGuessedWords === 0)
-      incrementCountOfRep()
-  }, [selectedFL, selectedSL])
-
-  useEffect(() => {
-    if (guessedIndFL.length === countOfStrins) {
-      clearButtons()
-      fillCurrentWords()
-    }
-  }, [guessedIndFL, guessedIndSL])
 
   function clearSelected() {
     setSelectedFL(-1)
     setSelectedSL(-1)
   }
 
-  function clearButtons() {
+  const clearButtons = useCallback(() => {
     setGuessedIndFL([])
     setGuessedIndSL([])
     clearSelected()
+  }, [])
+
+  const getIndecies = useCallback(() => {
+    setIndecies(vocabulary.firstLang.map((_, i) => i))
+  }, [vocabulary.firstLang])
+
+  function getRandomNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
-  function restart() {
-    countOfGuessedWords = 0
-    clearButtons()
-    getIndecies()
-    fillCurrentWords()
-  }
+  const shuffleArray = useCallback((array: number[]) => {
+    for (let i = 0; i < array.length; i++) {
+      const element = array[i]
+      const randomIndex = getRandomNumber(0, array.length - 1)
+      const anotherElement = array[randomIndex]
+      array[i] = anotherElement
+      array[randomIndex] = element
+    }
+  }, [])
 
-  function getIndecies() {
-    indecies = vocabulary.firstLang.map((el, i) => i)
-  }
+  const fillCurrentWords = useCallback(() => {
+    const fl = []
+    const sl = []
 
-  function fillCurrentWords() {
-    let fl = []
-    let sl = []
-
-    let minimal = Math.min(countOfStrins, indecies.length)
+    const minimal = Math.min(countOfStrins, indecies.length)
 
     for (let i = 0; i < minimal; i++) {
       const rndIndex = getRandomNumber(0, indecies.length - 1)
@@ -115,27 +79,70 @@ export default function ConnectingWords({
 
     setCurrIndFL(fl)
     setCurrIndSL(sl)
-  }
+  }, [countOfStrins, indecies, shuffleArray])
 
-  function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  }
+  const restart = useCallback(() => {
+    setCountOfGuessedWords(0)
+    clearButtons()
+    getIndecies()
+    fillCurrentWords()
+  }, [clearButtons, fillCurrentWords, getIndecies])
 
-  function shuffleArray(array) {
-    for (let i = 0; i < array.length; i++) {
-      let element = array[i]
-      let randomIndex = getRandomNumber(0, array.length - 1)
-      let anotherElement = array[randomIndex]
-      array[i] = anotherElement
-      array[randomIndex] = element
+  useEffect(() => {
+    if (id) dispatch(fetchVocabularyThunk(id))
+  }, [dispatch, id])
+
+  const go = useCallback(() => {
+    if (selectedFL === -1 || selectedSL === -1) return
+
+    if (currIndFL[selectedFL] === currIndSL[selectedSL]) {
+      setGuessedIndFL(current => [...current, selectedFL])
+      setGuessedIndSL(current => [...current, selectedSL])
+      setCountOfGuessedWords(prev => prev + 1)
+      clearSelected()
+    } else {
+      setWrongAnswer(true)
+      setTimeout(() => {
+        setWrongAnswer(false)
+        clearSelected()
+      }, 500)
     }
-  }
+
+    if (vocabulary.firstLang.length - countOfGuessedWords === 0)
+      dispatch(exerciseThunk(vocabulary.id))
+  }, [
+    countOfGuessedWords,
+    currIndFL,
+    currIndSL,
+    dispatch,
+    selectedFL,
+    selectedSL,
+    vocabulary.firstLang.length,
+    vocabulary.id,
+  ])
+
+  useEffect(() => {
+    go()
+  }, [go, selectedFL, selectedSL])
+
+  useEffect(() => {
+    restart()
+  }, [restart])
+
+  useEffect(() => {
+    if (guessedIndFL.length === countOfStrins) {
+      clearButtons()
+      fillCurrentWords()
+    }
+  }, [clearButtons, countOfStrins, fillCurrentWords, guessedIndFL.length])
+
+  if (!vocabulary) return <Loader />
 
   return (
     <main>
       <div className="h1-plus-buttons">
         <h1>Left words: {vocabulary.firstLang.length - countOfGuessedWords}</h1>
-        <Link className="btn btn-secondary" to="/vocabulary" ref={escapeRef}>
+        <Link className="btn btn-secondary" to={`/${id}`}>
           Cancel
         </Link>
         <a className="btn btn-success" onClick={restart}>
@@ -188,10 +195,4 @@ export default function ConnectingWords({
       </div>
     </main>
   )
-}
-
-ConnectingWords.propTypes = {
-  getVocabulary: PropTypes.func,
-  incrementCountOfRep: PropTypes.func,
-  escapeHandler: PropTypes.func,
 }

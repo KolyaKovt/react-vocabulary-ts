@@ -1,8 +1,6 @@
-import { FormEventHandler, useEffect } from "react"
+import { FormEventHandler } from "react"
 import { FieldValues, UseFormRegister } from "react-hook-form"
 import { Link, useParams } from "react-router-dom"
-import { useAppDispatch } from "../redux/hooks"
-import { fetchVocabularyThunk } from "../redux/vocabularies/operations"
 
 interface Props {
   submit: FormEventHandler<HTMLFormElement>
@@ -11,14 +9,7 @@ interface Props {
 }
 
 export const WordForm = ({ submit, register, btnLabel }: Props) => {
-  const dispatch = useAppDispatch()
   const { id } = useParams()
-
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchVocabularyThunk(id))
-    }
-  }, [dispatch, id])
 
   return (
     <form onSubmit={submit} className="card-body mb-4">

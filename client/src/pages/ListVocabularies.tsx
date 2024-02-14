@@ -36,26 +36,25 @@ export default function ListVocabularies() {
 
         <ul className="flex flex-col gap-5 pb-6">
           {vocabularies.map(vocabulary => {
+            const { id, name, exercise } = vocabulary
+
             return (
-              <li key={vocabulary.id}>
+              <li key={id}>
                 <div className="flex gap-2 mb-4 font-bold text-2xl">
-                  <h2>{vocabulary.name}</h2>
-                  <p>({vocabulary.exercise})</p>
+                  <h2>{name}</h2>
+                  <p>({exercise})</p>
                 </div>
                 <div className="flex gap-2">
-                  <Link className="btn btn-secondary" to={`/${vocabulary.id}`}>
+                  <Link className="btn btn-secondary" to={`/${id}`}>
                     Open
                   </Link>
-                  <Link
-                    className="btn btn-primary"
-                    to={`/rename/${vocabulary.id}`}
-                  >
+                  <Link className="btn btn-primary" to={`/rename/${id}`}>
                     Rename
                   </Link>
                   <button
                     className="btn btn-danger"
                     onClick={() =>
-                      dispatch(deleteVocabularyThunk(vocabulary.id.toString()))
+                      dispatch(deleteVocabularyThunk(id.toString()))
                     }
                   >
                     Delete

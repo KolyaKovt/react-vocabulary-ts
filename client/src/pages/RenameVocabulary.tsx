@@ -11,15 +11,16 @@ export default function RenameVocabulary() {
   const { register, handleSubmit, reset } = useForm()
   const { id } = useParams()
 
-  const submit: SubmitHandler<FieldValues> = data => {
+  const submit: SubmitHandler<FieldValues> = async data => {
     if (id) {
-      dispatch(
+      await dispatch(
         renameVocabularyThunk({
           name: data.name.trim(),
           id: id,
         })
       )
     }
+
     navigate("/")
     reset()
   }

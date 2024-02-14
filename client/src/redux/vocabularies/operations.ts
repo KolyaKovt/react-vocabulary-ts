@@ -104,6 +104,7 @@ export const addWordThunk = createAsyncThunk<void, wordBody>(
   async (body, thunkAPI) => {
     try {
       await api.post("/words", body)
+      thunkAPI.dispatch(fetchVocabularyThunk(body.id))
     } catch (error) {
       return thunkAPI.rejectWithValue(getTextForError(error, "adding a word"))
     }
@@ -122,11 +123,24 @@ export const deleteWordThunk = createAsyncThunk<number, number>(
   }
 )
 
-export const changeWordThunk = createAsyncThunk<void, wordBody>(
+export const changeWordThunk = createAsyncThunk<wordBody, wordBody>(
   "change a word",
   async (body, thunkAPI) => {
     try {
       await api.patch("/words", body)
+      return body
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getTextForError(error, "changing a word"))
+    }
+  }
+)
+
+export const exerciseThunk = createAsyncThunk<number, string | number>(
+  "exercise",
+  async (id, thunkAPI) => {
+    try {
+      await api.patch("/exercise", { id })
+      return +id
     } catch (error) {
       return thunkAPI.rejectWithValue(getTextForError(error, "changing a word"))
     }
