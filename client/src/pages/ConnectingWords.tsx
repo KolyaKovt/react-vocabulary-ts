@@ -4,21 +4,18 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { selectVocabulary } from "../redux/vocabularies/slice"
 import { Loader } from "../components/Loader"
 
-import {
-  exerciseThunk,
-  fetchVocabularyThunk,
-} from "../redux/vocabularies/operations"
+import { exerciseThunk } from "../redux/vocabularies/operations"
 import { Vocabulary } from "../types/Vocabulary"
+
+const countOfStrins = 7
+let indecies: number[] = []
+let countOfGuessedWords: number = 0
 
 export default function ConnectingWords() {
   const dispatch = useAppDispatch()
 
   const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
   const { id } = useParams()
-
-  const [countOfStrins] = useState(7)
-  const [indecies, setIndecies] = useState<number[]>([])
-  const [countOfGuessedWords, setCountOfGuessedWords] = useState(0)
 
   const [currIndFL, setCurrIndFL] = useState<number[]>([])
   const [currIndSL, setCurrIndSL] = useState<number[]>([])
@@ -31,7 +28,7 @@ export default function ConnectingWords() {
 
   const [wrongAnswer, setWrongAnswer] = useState(false)
 
-  function clearSelected() {
+  const clearSelected = () => {
     setSelectedFL(-1)
     setSelectedSL(-1)
   }
@@ -43,10 +40,10 @@ export default function ConnectingWords() {
   }, [])
 
   const getIndecies = useCallback(() => {
-    setIndecies(vocabulary.firstLang.map((_, i) => i))
+    indecies = vocabulary.firstLang.map((_, i) => i)
   }, [vocabulary.firstLang])
 
-  function getRandomNumber(min: number, max: number) {
+  const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
@@ -79,18 +76,14 @@ export default function ConnectingWords() {
 
     setCurrIndFL(fl)
     setCurrIndSL(sl)
-  }, [countOfStrins, indecies, shuffleArray])
+  }, [shuffleArray])
 
   const restart = useCallback(() => {
-    setCountOfGuessedWords(0)
+    countOfGuessedWords = 0
     clearButtons()
     getIndecies()
     fillCurrentWords()
   }, [clearButtons, fillCurrentWords, getIndecies])
-
-  useEffect(() => {
-    if (id) dispatch(fetchVocabularyThunk(id))
-  }, [dispatch, id])
 
   const go = useCallback(() => {
     if (selectedFL === -1 || selectedSL === -1) return
@@ -98,7 +91,7 @@ export default function ConnectingWords() {
     if (currIndFL[selectedFL] === currIndSL[selectedSL]) {
       setGuessedIndFL(current => [...current, selectedFL])
       setGuessedIndSL(current => [...current, selectedSL])
-      setCountOfGuessedWords(prev => prev + 1)
+      countOfGuessedWords++
       clearSelected()
     } else {
       setWrongAnswer(true)
@@ -111,7 +104,6 @@ export default function ConnectingWords() {
     if (vocabulary.firstLang.length - countOfGuessedWords === 0)
       dispatch(exerciseThunk(vocabulary.id))
   }, [
-    countOfGuessedWords,
     currIndFL,
     currIndSL,
     dispatch,
@@ -122,19 +114,19 @@ export default function ConnectingWords() {
   ])
 
   useEffect(() => {
-    go()
-  }, [go, selectedFL, selectedSL])
-
-  useEffect(() => {
     restart()
   }, [restart])
+
+  useEffect(() => {
+    go()
+  }, [go, selectedFL, selectedSL])
 
   useEffect(() => {
     if (guessedIndFL.length === countOfStrins) {
       clearButtons()
       fillCurrentWords()
     }
-  }, [clearButtons, countOfStrins, fillCurrentWords, guessedIndFL.length])
+  }, [clearButtons, fillCurrentWords, guessedIndFL.length])
 
   if (!vocabulary) return <Loader />
 
