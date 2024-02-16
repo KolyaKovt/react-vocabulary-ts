@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { selectVocabulary } from "../redux/vocabularies/slice"
 import { Loader } from "../components/Loader"
@@ -15,7 +15,6 @@ export default function ConnectingWords() {
   const dispatch = useAppDispatch()
 
   const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
-  const { id } = useParams()
 
   const [currIndFL, setCurrIndFL] = useState<number[]>([])
   const [currIndSL, setCurrIndSL] = useState<number[]>([])
@@ -134,7 +133,7 @@ export default function ConnectingWords() {
     <main>
       <div className="h1-plus-buttons">
         <h1>Left words: {vocabulary.firstLang.length - countOfGuessedWords}</h1>
-        <Link className="btn btn-secondary" to={`/${id}`}>
+        <Link className="btn btn-secondary" to={`/${vocabulary.id}`}>
           Cancel
         </Link>
         <a className="btn btn-success" onClick={restart}>

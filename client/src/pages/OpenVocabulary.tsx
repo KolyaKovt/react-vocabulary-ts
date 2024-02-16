@@ -29,30 +29,32 @@ export default function OpenVocabulary() {
           </Link>
         </div>
       </div>
-      {vocabulary.firstLang.map((word, index) => {
-        const wordsId = vocabulary.wordsIds[index]
-        const translation = vocabulary.secLang[index]
+      <ul>
+        {vocabulary.firstLang.map((word, index) => {
+          const wordsId = vocabulary.wordsIds[index]
+          const translation = vocabulary.secLang[index]
 
-        return (
-          <div className="" key={wordsId}>
-            <div className="">
-              <div className="">{word}</div>
-              <div className="">{translation}</div>
-            </div>
-            <div className="">
-              <Link to={`change/${wordsId}`} className="btn btn-primary">
-                Change
-              </Link>
-              <a
-                className="btn btn-danger"
-                onClick={() => dispatch(deleteWordThunk(wordsId))}
-              >
-                Delete
-              </a>
-            </div>
-          </div>
-        )
-      })}
+          return (
+            <li className="container-for-word-pairs" key={wordsId}>
+              <div className="word-pairs">
+                <div className="word">{word}</div>
+                <div className="word">{translation}</div>
+              </div>
+              <div className="">
+                <Link to={`change/${wordsId}`} className="btn btn-primary">
+                  Change
+                </Link>
+                <a
+                  className="btn btn-danger"
+                  onClick={() => dispatch(deleteWordThunk(wordsId))}
+                >
+                  Delete
+                </a>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
     </main>
   )
 }

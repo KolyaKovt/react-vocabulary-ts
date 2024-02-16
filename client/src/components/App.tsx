@@ -8,7 +8,7 @@ import AddWords from "../pages/AddWords"
 import ChangeWords from "../pages/ChangeWords"
 import ConnectingWords from "../pages/ConnectingWords"
 import { VocabularyLayout } from "./VocabularyLayout"
-// import GuessingWords from "../pages/GuessingWords"
+import GuessingWords from "../pages/GuessingWords"
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path=":id" element={<VocabularyLayout />}>
           <Route index element={<OpenVocabulary />} />
           <Route path="play/connecting-words" element={<ConnectingWords />} />
-          {/* <Route path="play/guessing-words" element={<GuessingWords />} /> */}
+          <Route path="play/guessing-words" element={<GuessingWords />} />
           <Route path="add" element={<AddWords />} />
           <Route path="change/:wordId" element={<ChangeWords />} />
         </Route>
