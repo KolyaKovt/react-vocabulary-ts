@@ -6,6 +6,8 @@ import { Loader } from "../components/Loader"
 
 import { exerciseThunk } from "../redux/vocabularies/operations"
 import { Vocabulary } from "../types/Vocabulary"
+import { Container } from "../components/Container"
+import { Header } from "../components/Header"
 
 const countOfStrins = 7
 let indecies: number[] = []
@@ -130,21 +132,28 @@ export default function ConnectingWords() {
   if (!vocabulary) return <Loader />
 
   return (
-    <main>
-      <div className="h1-plus-buttons">
-        <h1>Left words: {vocabulary.firstLang.length - countOfGuessedWords}</h1>
-        <Link className="btn btn-secondary" to={`/${vocabulary.id}`}>
-          Cancel
-        </Link>
-        <a className="btn btn-success" onClick={restart}>
-          Restart
-        </a>
-      </div>
-      <div className="games-container">
-        {currIndFL.map((wIndex, i) => {
-          return (
-            <div className="word-pairs game" key={i}>
-              <div
+    <Container>
+      <Header>
+        <p className="mainTitle mb-6">
+          Left words: {vocabulary.firstLang.length - countOfGuessedWords}
+        </p>
+        <div className="btnContainer">
+          <Link className="btn btn-secondary" to={`/${vocabulary.id}`}>
+            Cancel
+          </Link>
+          <a className="btn btn-success" onClick={restart}>
+            Restart
+          </a>
+        </div>
+      </Header>
+
+      <main className="w-[100%]">
+        <section>
+          <h1 className="visually-hidden">plaing connecting words</h1>
+          <ul className="wordsColumn mb-6">
+            {currIndFL.map((index, i) => (
+              <li
+                key={i}
                 className={
                   "word " +
                   (wrongAnswer && selectedFL === i
@@ -160,9 +169,15 @@ export default function ConnectingWords() {
                   selectedFL === i ? setSelectedFL(-1) : setSelectedFL(i)
                 }}
               >
-                {vocabulary.firstLang[wIndex]}
-              </div>
-              <div
+                {vocabulary.firstLang[index]}
+              </li>
+            ))}
+          </ul>
+
+          <ul className="wordsColumn">
+            {currIndSL.map((index, i) => (
+              <li
+                key={i}
                 className={
                   "word " +
                   (wrongAnswer && selectedSL === i
@@ -178,12 +193,12 @@ export default function ConnectingWords() {
                   selectedSL === i ? setSelectedSL(-1) : setSelectedSL(i)
                 }}
               >
-                {vocabulary.secLang[currIndSL[i]]}
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </main>
+                {vocabulary.secLang[index]}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </Container>
   )
 }

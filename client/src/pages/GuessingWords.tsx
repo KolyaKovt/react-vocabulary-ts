@@ -101,19 +101,17 @@ const GuessingWords = () => {
       </div>
       <div className="word-to-guess">{vocabulary.firstLang[correctInd]}</div>
       <div className="games-container">
-        {buttonsInds.map((bIndex, i) => {
-          return (
-            <div
-              className={
-                "word words-variants " + (wrongInds.includes(i) ? "wrong" : "")
-              }
-              onClick={() => checkTheAnswer(i)}
-              key={i}
-            >
-              {vocabulary.secLang[bIndex]}
-            </div>
-          )
-        })}
+        {buttonsInds.map((bIndex, i) => (
+          <div
+            className={
+              "word words-variants " + (wrongInds.includes(i) ? "wrong" : "")
+            }
+            onClick={() => checkTheAnswer(i)}
+            key={i}
+          >
+            {vocabulary.secLang[bIndex]}
+          </div>
+        ))}
       </div>
     </main>
   )
