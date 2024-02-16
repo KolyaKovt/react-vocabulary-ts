@@ -54,7 +54,7 @@ const GuessingWords = () => {
     shuffleArray(l)
 
     setButtonsInds(l)
-  }, [])
+  }, [shuffleArray])
 
   const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
@@ -82,7 +82,7 @@ const GuessingWords = () => {
     setWrongInds([])
     indecies = vocabulary.firstLang.map((_, i) => i)
     fillButtonsInds()
-  }, [])
+  }, [fillButtonsInds, vocabulary.firstLang])
 
   useEffect(() => {
     restart()
