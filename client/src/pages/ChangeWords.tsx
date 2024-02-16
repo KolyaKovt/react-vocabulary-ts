@@ -5,6 +5,7 @@ import { selectVocabulary } from "../redux/vocabularies/slice"
 import { changeWordThunk } from "../redux/vocabularies/operations"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { Vocabulary } from "../types/Vocabulary"
+import { Container } from "../components/Container"
 
 const ChangeWords = () => {
   const navigate = useNavigate()
@@ -29,14 +30,16 @@ const ChangeWords = () => {
   }
 
   return (
-    <main>
-      <h1>Changing words in: {vocabulary.name}</h1>
-      <WordForm
-        submit={handleSubmit(submit)}
-        register={register}
-        btnLabel="Change"
-      />
-    </main>
+    <Container>
+      <main>
+        <h1 className="mainTitle mt-6 mb-6">Changing words in: {vocabulary.name}</h1>
+        <WordForm
+          submit={handleSubmit(submit)}
+          register={register}
+          btnLabel="Change"
+        />
+      </main>
+    </Container>
   )
 }
 

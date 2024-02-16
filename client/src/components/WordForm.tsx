@@ -12,7 +12,7 @@ export const WordForm = ({ submit, register, btnLabel }: Props) => {
   const { id } = useParams()
 
   return (
-    <form onSubmit={submit} className="card-body mb-4">
+    <form onSubmit={submit}>
       <div className="form-control">
         <label className="label">
           <span className="label-text">Word</span>
