@@ -10,7 +10,7 @@ interface Props {
 
 export const VocabularyForm = ({ submit, register, btnLabel }: Props) => {
   return (
-    <form onSubmit={submit} className="card-body mb-4">
+    <form onSubmit={submit}>
       <div className="form-control">
         <label className="label">
           <span className="label-text">Name</span>

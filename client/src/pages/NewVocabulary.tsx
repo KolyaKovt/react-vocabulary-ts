@@ -3,6 +3,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { VocabularyForm } from "../components/VocabularyForm"
 import { createVocabularyThunk } from "../redux/vocabularies/operations"
 import { useAppDispatch } from "../redux/hooks"
+import { Container } from "../components/Container"
 
 export default function NewVocabulary() {
   const dispatch = useAppDispatch()
@@ -14,15 +15,17 @@ export default function NewVocabulary() {
   }
 
   return (
-    <main>
-      <section className="flex flex-col items-center">
-        <h1 className="mt-6 mb-6 text-4xl font-bold">New vocabulary</h1>
-        <VocabularyForm
-          submit={handleSubmit(submit)}
-          register={register}
-          btnLabel={"Add"}
-        />
-      </section>
-    </main>
+    <Container>
+      <main>
+        <section>
+          <p className="mt-6 mb-6 text-4xl font-bold">New vocabulary</p>
+          <VocabularyForm
+            submit={handleSubmit(submit)}
+            register={register}
+            btnLabel={"Add"}
+          />
+        </section>
+      </main>
+    </Container>
   )
 }
