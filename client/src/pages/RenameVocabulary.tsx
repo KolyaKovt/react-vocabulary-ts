@@ -16,7 +16,7 @@ export default function RenameVocabulary() {
       await dispatch(
         renameVocabularyThunk({
           name: data.name.trim(),
-          id: id,
+          id,
         })
       )
     }

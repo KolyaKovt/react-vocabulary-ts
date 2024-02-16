@@ -10,11 +10,11 @@ const ChangeWords = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
-  const { id, wordId } = useParams()
+  const { wordId } = useParams()
   const { handleSubmit, register, reset } = useForm()
 
   const submit: SubmitHandler<FieldValues> = async data => {
-    if (id && wordId) {
+    if (vocabulary.id && wordId) {
       await dispatch(
         changeWordThunk({
           id: wordId,
@@ -25,7 +25,7 @@ const ChangeWords = () => {
     }
 
     reset()
-    navigate(`/${id}`)
+    navigate(`/${vocabulary.id}`)
   }
 
   return (
