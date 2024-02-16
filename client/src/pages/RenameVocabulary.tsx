@@ -4,6 +4,7 @@ import { VocabularyForm } from "../components/VocabularyForm"
 import { renameVocabularyThunk } from "../redux/vocabularies/operations"
 import { useNavigate, useParams } from "react-router-dom"
 import { useAppDispatch } from "../redux/hooks"
+import { Container } from "../components/Container"
 
 export default function RenameVocabulary() {
   const dispatch = useAppDispatch()
@@ -26,15 +27,19 @@ export default function RenameVocabulary() {
   }
 
   return (
-    <main>
-      <section className="flex flex-col items-center">
-        <h1 className="mt-6 mb-6 text-4xl font-bold">Rename the vocabulary</h1>
-        <VocabularyForm
-          submit={handleSubmit(submit)}
-          register={register}
-          btnLabel={"Rename"}
-        />
-      </section>
-    </main>
+    <Container>
+      <main>
+        <section>
+          <h1 className="mt-6 mb-6 text-4xl font-bold">
+            Rename the vocabulary
+          </h1>
+          <VocabularyForm
+            submit={handleSubmit(submit)}
+            register={register}
+            btnLabel={"Rename"}
+          />
+        </section>
+      </main>
+    </Container>
   )
 }
