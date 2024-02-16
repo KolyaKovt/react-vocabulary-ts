@@ -5,10 +5,8 @@ export const store = configureStore({
   reducer: {
     vocabularies: vocabulariesReducer,
   },
-  devTools: import.meta.env.NODE_ENV !== "production",
+  devTools: import.meta.env.MODE !== "production",
 })
-
-console.log(import.meta.env)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

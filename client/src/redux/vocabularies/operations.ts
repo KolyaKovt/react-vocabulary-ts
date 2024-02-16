@@ -6,7 +6,7 @@ import { Vocabulary } from "../../types/Vocabulary"
 // https://vocabulary-dsm6.onrender.com
 const api = axios.create({
   baseURL:
-    import.meta.env.NODE_ENV === "production"
+    import.meta.env.MODE === "production"
       ? "https://vocabulary-dsm6.onrender.com"
       : "http://localhost:3310",
 })
