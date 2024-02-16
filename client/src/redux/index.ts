@@ -8,7 +8,7 @@ export const store = configureStore({
   devTools: import.meta.env.NODE_ENV !== "production",
 })
 
-console.log(import.meta.env.NODE_ENV)
+console.log(import.meta.env)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
