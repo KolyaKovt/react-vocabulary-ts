@@ -12,6 +12,7 @@ import {
   selectIsLoading,
   selectVocabularies,
 } from "../redux/vocabularies/slice"
+import { Container } from "../components/Container"
 
 export default function ListVocabularies() {
   const dispatch = useAppDispatch()
@@ -23,48 +24,59 @@ export default function ListVocabularies() {
   }, [dispatch])
 
   return (
-    <main className="flex flex-col items-center">
+    <>
       {isLoading && <Loader />}
 
-      <section>
-        <div className="py-6 sticky top-0 bg-[#1d232a]">
-          <h1 className="mb-6 text-4xl font-bold">Vocabularies</h1>
+      <Container>
+        <header className="w-[100%] py-6 sticky top-0 bg-[#1d232a]">
+          <p className="mb-6 text-4xl font-bold">Vocabularies</p>
           <Link className="btn btn-success" to="/new">
             New vocabulary
           </Link>
-        </div>
+        </header>
 
-        <ul className="flex flex-col gap-5 pb-6">
-          {vocabularies.map(vocabulary => {
-            const { id, name, exercise } = vocabulary
+        <main>
+          <section>
+            <h1 className="visually-hidden">Vocabularies list</h1>
+            <ul className="flex flex-col gap-5 pb-6">
+              {vocabularies.map(vocabulary => {
+                const { id, name, exercise } = vocabulary
 
-            return (
-              <li key={id}>
-                <div className="flex gap-2 mb-4 font-bold text-2xl">
-                  <h2>{name}</h2>
-                  <p>({exercise})</p>
-                </div>
-                <div className="flex gap-2">
-                  <Link className="btn btn-secondary" to={`/${id}`}>
-                    Open
-                  </Link>
-                  <Link className="btn btn-primary" to={`/rename/${id}`}>
-                    Rename
-                  </Link>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() =>
-                      dispatch(deleteVocabularyThunk(id.toString()))
-                    }
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-      </section>
-    </main>
+                return (
+                  <li key={id}>
+                    <div className="flex gap-2 mb-4 font-bold text-2xl">
+                      <h2>{name}</h2>
+                      <p>({exercise})</p>
+                    </div>
+                    <ul className="flex gap-2">
+                      <li>
+                        <Link className="btn btn-secondary" to={`/${id}`}>
+                          Open
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="btn btn-primary" to={`/rename/${id}`}>
+                          Rename
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() =>
+                            dispatch(deleteVocabularyThunk(id.toString()))
+                          }
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+        </main>
+      </Container>
+    </>
   )
 }
