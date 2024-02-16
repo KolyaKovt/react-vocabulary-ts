@@ -8,6 +8,7 @@ import { exerciseThunk } from "../redux/vocabularies/operations"
 const countOfStrins = 6
 let indecies: number[] = []
 let countOfGuessedWords = 0
+let correctInd = -1
 
 const GuessingWords = () => {
   const dispatch = useAppDispatch()
@@ -16,7 +17,6 @@ const GuessingWords = () => {
 
   const [buttonsInds, setButtonsInds] = useState<number[]>([])
   const [wrongInds, setWrongInds] = useState<number[]>([])
-  const [correctInd, setCorrectInd] = useState(-1)
 
   const shuffleArray = useCallback((array: number[]) => {
     for (let i = 0; i < array.length; i++) {
@@ -30,7 +30,7 @@ const GuessingWords = () => {
 
   const fillButtonsInds = useCallback(() => {
     const rndIndex = getRandomNumber(0, indecies.length - 1)
-    setCorrectInd(indecies[rndIndex])
+    correctInd = indecies[rndIndex]
     const l = [indecies[rndIndex]]
 
     indecies.splice(rndIndex, 1)
@@ -54,7 +54,7 @@ const GuessingWords = () => {
     shuffleArray(l)
 
     setButtonsInds(l)
-  }, [shuffleArray])
+  }, [shuffleArray, vocabulary.firstLang.length])
 
   const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
@@ -71,7 +71,7 @@ const GuessingWords = () => {
 
     if (vocabulary.firstLang.length - countOfGuessedWords === 0) {
       setButtonsInds([])
-      setCorrectInd(-1)
+      correctInd = -1
       dispatch(exerciseThunk(vocabulary.id))
       restart()
     }
