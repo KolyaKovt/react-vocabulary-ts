@@ -3,58 +3,74 @@ import { selectVocabulary } from "../redux/vocabularies/slice"
 import { deleteWordThunk } from "../redux/vocabularies/operations"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { Vocabulary } from "../types/Vocabulary"
+import { Container } from "../components/Container"
+import { Header } from "../components/Header"
 
 export default function OpenVocabulary() {
   const dispatch = useAppDispatch()
   const vocabulary = useAppSelector(selectVocabulary) as Vocabulary
 
   return (
-    <main className="flex flex-col items-center">
-      <div className="py-6 sticky top-0 bg-[#1d232a]">
-        <h1 className="mb-6 text-4xl font-bold">
+    <Container>
+      <Header>
+        <p className="mainTitle mb-6">
           {vocabulary.name} (count: {vocabulary.firstLang.length})
-        </h1>
-        <div className="flex gap-2">
-          <Link className="btn btn-secondary" to="/">
-            Cancel
-          </Link>
-          <Link className="btn btn-success" to="add">
-            Add words
-          </Link>
-          <Link className="btn btn-primary" to="play/connecting-words">
-            Play connecting words
-          </Link>
-          <Link className="btn btn-dark" to="play/guessing-words">
-            Play guessing word
-          </Link>
-        </div>
-      </div>
-      <ul>
-        {vocabulary.firstLang.map((word, index) => {
-          const wordsId = vocabulary.wordsIds[index]
-          const translation = vocabulary.secLang[index]
+        </p>
+        <ul className="btnContainer">
+          <li>
+            <Link className="btn btn-secondary" to="/">
+              Cancel
+            </Link>
+          </li>
+          <li>
+            <Link className="btn btn-success" to="add">
+              Add words
+            </Link>
+          </li>
+          <li>
+            <Link className="btn btn-primary" to="play/connecting-words">
+              Play connecting words
+            </Link>
+          </li>
+          <li>
+            <Link className="btn btn-dark" to="play/guessing-words">
+              Play guessing word
+            </Link>
+          </li>
+        </ul>
+      </Header>
 
-          return (
-            <li className="container-for-word-pairs" key={wordsId}>
-              <div className="word-pairs">
-                <div className="word">{word}</div>
-                <div className="word">{translation}</div>
-              </div>
-              <div className="">
-                <Link to={`change/${wordsId}`} className="btn btn-primary">
-                  Change
-                </Link>
-                <a
-                  className="btn btn-danger"
-                  onClick={() => dispatch(deleteWordThunk(wordsId))}
-                >
-                  Delete
-                </a>
-              </div>
-            </li>
-          )
-        })}
-      </ul>
-    </main>
+      <main>
+        <section>
+          <h1 className="visually-hidden">Words list</h1>
+          <ul className="itemsList">
+            {vocabulary.firstLang.map((word, index) => {
+              const wordsId = vocabulary.wordsIds[index]
+              const translation = vocabulary.secLang[index]
+
+              return (
+                <li className="container-for-word-pairs" key={wordsId}>
+                  <div className="wordPairs">
+                    <div className="word">{word}</div>
+                    <div className="word">{translation}</div>
+                  </div>
+                  <div className="btnContainer">
+                    <Link to={`change/${wordsId}`} className="btn btn-primary">
+                      Change
+                    </Link>
+                    <a
+                      className="btn btn-danger"
+                      onClick={() => dispatch(deleteWordThunk(wordsId))}
+                    >
+                      Delete
+                    </a>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      </main>
+    </Container>
   )
 }

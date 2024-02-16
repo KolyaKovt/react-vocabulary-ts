@@ -18,7 +18,7 @@ export default function NewVocabulary() {
     <Container>
       <main>
         <section>
-          <h1 className="mt-6 mb-6 text-4xl font-bold">New vocabulary</h1>
+          <h1 className="mainTitle mt-6 mb-6">New vocabulary</h1>
           <VocabularyForm
             submit={handleSubmit(submit)}
             register={register}

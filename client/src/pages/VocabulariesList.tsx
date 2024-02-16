@@ -13,6 +13,7 @@ import {
   selectVocabularies,
 } from "../redux/vocabularies/slice"
 import { Container } from "../components/Container"
+import { Header } from "../components/Header"
 
 export default function ListVocabularies() {
   const dispatch = useAppDispatch()
@@ -28,27 +29,27 @@ export default function ListVocabularies() {
       {isLoading && <Loader />}
 
       <Container>
-        <header className="w-[100%] py-6 sticky top-0 bg-[#1d232a]">
-          <p className="mb-6 text-4xl font-bold">Vocabularies</p>
+        <Header>
+          <p className="mainTitle mb-6">Vocabularies</p>
           <Link className="btn btn-success" to="/new">
             New vocabulary
           </Link>
-        </header>
+        </Header>
 
         <main>
           <section>
-            <h1 className="visually-hidden">Vocabularies list</h1>
-            <ul className="flex flex-col gap-5 pb-6">
+            <h2 className="visually-hidden">Vocabularies list</h2>
+            <ul className="itemsList">
               {vocabularies.map(vocabulary => {
                 const { id, name, exercise } = vocabulary
 
                 return (
                   <li key={id}>
-                    <div className="flex gap-2 mb-4 font-bold text-2xl">
-                      <h2>{name}</h2>
+                    <div className="btnContainer mb-4 font-bold text-2xl">
+                      <p>{name}</p>
                       <p>({exercise})</p>
                     </div>
-                    <ul className="flex gap-2">
+                    <ul className="btnContainer">
                       <li>
                         <Link className="btn btn-secondary" to={`/${id}`}>
                           Open

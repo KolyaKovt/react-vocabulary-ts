@@ -23,7 +23,7 @@ export const VocabularyForm = ({ submit, register, btnLabel }: Props) => {
           required
         />
       </div>
-      <div className="flex flex-row mt-6 gap-2">
+      <div className="btnContainer mt-6">
         <Link className="btn btn-secondary" to="/">
           Cancel
         </Link>

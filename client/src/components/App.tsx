@@ -19,8 +19,10 @@ function App() {
         <Route path="rename/:id" element={<RenameVocabulary />} />
         <Route path=":id" element={<VocabularyLayout />}>
           <Route index element={<OpenVocabulary />} />
-          <Route path="play/connecting-words" element={<ConnectingWords />} />
-          <Route path="play/guessing-words" element={<GuessingWords />} />
+          <Route path="play">
+            <Route path="connecting-words" element={<ConnectingWords />} />
+            <Route path="guessing-words" element={<GuessingWords />} />
+          </Route>
           <Route path="add" element={<AddWords />} />
           <Route path="change/:wordId" element={<ChangeWords />} />
         </Route>

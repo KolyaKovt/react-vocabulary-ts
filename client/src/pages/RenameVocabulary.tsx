@@ -30,7 +30,7 @@ export default function RenameVocabulary() {
     <Container>
       <main>
         <section>
-          <h1 className="mt-6 mb-6 text-4xl font-bold">
+          <h1 className="mainTitle mt-6 mb-6">
             Rename the vocabulary
           </h1>
           <VocabularyForm
