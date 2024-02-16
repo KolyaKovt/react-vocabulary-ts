@@ -9,7 +9,7 @@ import { Vocabulary } from "../types/Vocabulary"
 import { Container } from "../components/Container"
 import { Header } from "../components/Header"
 
-const countOfStrins = 7
+const countOfStrins = 4
 let indecies: number[] = []
 let countOfGuessedWords: number = 0
 

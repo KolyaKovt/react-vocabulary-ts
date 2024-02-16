@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { selectVocabulary } from "../redux/vocabularies/slice"
 import { Vocabulary } from "../types/Vocabulary"
 import { exerciseThunk } from "../redux/vocabularies/operations"
+import { Container } from "../components/Container"
+import { Header } from "../components/Header"
 
 const countOfStrins = 6
 let indecies: number[] = []
@@ -89,31 +91,42 @@ const GuessingWords = () => {
   }, [restart])
 
   return (
-    <main>
-      <div className="h1-plus-buttons">
-        <h1>Left words: {vocabulary.firstLang.length - countOfGuessedWords}</h1>
-        <Link className="btn btn-secondary" to={`/${vocabulary.id}`}>
-          Cancel
-        </Link>
-        <a className="btn btn-success" onClick={restart}>
-          Restart
-        </a>
-      </div>
-      <div className="word-to-guess">{vocabulary.firstLang[correctInd]}</div>
-      <div className="games-container">
-        {buttonsInds.map((bIndex, i) => (
-          <div
-            className={
-              "word words-variants " + (wrongInds.includes(i) ? "wrong" : "")
-            }
-            onClick={() => checkTheAnswer(i)}
-            key={i}
-          >
-            {vocabulary.secLang[bIndex]}
-          </div>
-        ))}
-      </div>
-    </main>
+    <Container>
+      <Header>
+        <p className="mainTitle mb-6">
+          Left words: {vocabulary.firstLang.length - countOfGuessedWords}
+        </p>
+
+        <div className="btnContainer">
+          <Link className="btn btn-secondary" to={`/${vocabulary.id}`}>
+            Cancel
+          </Link>
+          <a className="btn btn-success" onClick={restart}>
+            Restart
+          </a>
+        </div>
+      </Header>
+
+      <main className="w-[100%]">
+        <section>
+          <h1 className="visually-hidden">playing guessing words</h1>
+          <p className="mb-4 text-2xl text-center">
+            {vocabulary.firstLang[correctInd]}
+          </p>
+          <ul className="wordsColumn">
+            {buttonsInds.map((bIndex, i) => (
+              <li
+                className={"word " + (wrongInds.includes(i) ? "wrong" : "")}
+                onClick={() => checkTheAnswer(i)}
+                key={i}
+              >
+                {vocabulary.secLang[bIndex]}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </Container>
   )
 }
 
