@@ -7,7 +7,7 @@
     "start": "node ."
   },
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "keywords": [],
   "author": "Mykola Kovtunets <kovtunets73@gmail.com>",
