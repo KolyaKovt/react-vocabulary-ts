@@ -6,6 +6,9 @@
     "dev": "nodemon .",
     "start": "node ."
   },
+  "engines": {
+    "node": "14.x"
+  },
   "keywords": [],
   "author": "Mykola Kovtunets <kovtunets73@gmail.com>",
   "license": "ISC",
